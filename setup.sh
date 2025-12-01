@@ -5,13 +5,37 @@ sed -i 's/\\"npm run dev\\" --names=server,queue,logs,vite/--names=schedule,queu
 sed -i '/npm/d' composer.json
 npx prettier --write composer.json
 
-composer require laravel/fortify
+composer require fredikaputra/activity-logger fredikaputra/socialite-boilerplate fredikaputra/async-logger laravel/fortify
 composer require laravel/telescope --dev
 php artisan telescope:install
 php artisan install:api --passport
 php artisan fortify:install
 php artisan sail:publish
-php artisan migrate:sequence
+
+MIG_DIR="database/migrations"
+PREFIX="0001_01_01_"
+
+last_index=$(ls "$MIG_DIR"/"$PREFIX"*.php 2>/dev/null | sed -E "s/.*$PREFIX([0-9]+)_.*/\1/" | sort -rn | head -1)
+
+if [ -z "$last_index" ]; then
+    last_index=-1
+else
+    last_index=$((10#$last_index))
+fi
+
+for file in $(ls "$MIG_DIR"/*.php | grep -v "$PREFIX" | sort); do
+    last_index=$((last_index + 1))
+    
+    next_num=$(printf "%06d" "$last_index")
+    
+    filename=$(basename "$file")
+    
+    base_name=$(echo "$filename" | sed -E 's/^[0-9]{4}_[0-9]{2}_[0-9]{2}_[0-9]{6}_//')
+    
+    new_name="${PREFIX}${next_num}_${base_name}"
+    
+    mv "$file" "$MIG_DIR/$new_name"
+done
 
 cp my-laravel-setup/.env.example .env.example
 cp my-laravel-setup/ArchTest.php tests/Unit/ArchTest.php
