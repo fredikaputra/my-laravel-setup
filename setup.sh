@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sed -i 's/#93c5fd,#c4b5fd,#fb7185,#fdba74/#fdba74,#c4b5fd,#fb7185/g' composer.json
 sed -i 's/php artisan serve/php artisan schedule:work/g' composer.json
 sed -i 's/\\"npm run dev\\" --names=server,queue,logs,vite/--names=schedule,queue,logs/g' composer.json
 sed -i '/npm/d' composer.json
