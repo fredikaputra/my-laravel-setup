@@ -2,6 +2,18 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Mattiverse\Userstamps\Traits\Userstamps;
+
 arch()->preset()->php();
 // arch()->preset()->laravel(); https://github.com/pestphp/pest/issues/1525
 arch()->preset()->strict();
@@ -18,37 +30,37 @@ arch('controllers')
 
 arch('models')
     ->expect('App\Models')
-    ->toHaveAttribute('Illuminate\Database\Eloquent\Attributes\ObservedBy')
     ->toUseTraits([
-        'Illuminate\Database\Eloquent\SoftDeletes',
-        'Illuminate\Database\Eloquent\Prunable',
-        'Mattiverse\Userstamps\Traits\Userstamps',
+        SoftDeletes::class,
+        Prunable::class,
+        Userstamps::class,
+        HasUuids::class,
     ]);
 
 arch('user model')
-    ->expect('App\Models\User')
-    ->toExtend('Illuminate\Foundation\Auth\User')
-    ->toImplement('Illuminate\Contracts\Auth\MustVerifyEmail')
+    ->expect(User::class)
+    ->toExtend(Illuminate\Foundation\Auth\User::class)
+    ->toImplement(MustVerifyEmail::class)
     ->toUseTraits([
-        'Illuminate\Notifications\Notifiable',
-        'Laravel\Fortify\TwoFactorAuthenticatable',
+        Notifiable::class,
+        TwoFactorAuthenticatable::class,
     ]);
 
 arch('listeners')
     ->expect('App\Listeners')
-    ->toImplement('Illuminate\Contracts\Queue\ShouldBeEncrypted')
-    ->toImplement('Illuminate\Contracts\Queue\ShouldQueue')
+    ->toImplement(ShouldBeEncrypted::class)
+    ->toImplement(ShouldQueue::class)
     ->ignoring('App\Listeners\Log\Console')
-    ->toImplement('Illuminate\Contracts\Queue\ShouldQueueAfterCommit')
+    ->toImplement(ShouldQueueAfterCommit::class)
     ->ignoring('App\Listeners\Log\Console');
 
 arch('mailables')
     ->expect('App\Mail')
-    ->toImplement('Illuminate\Contracts\Queue\ShouldQueue');
+    ->toImplement(ShouldQueue::class);
 
 arch('notifications')
     ->expect('App\Notifications')
-    ->toImplement('Illuminate\Contracts\Queue\ShouldQueue');
+    ->toImplement(ShouldQueue::class);
 
 arch('observers')
     ->expect('App\Observers')

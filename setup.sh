@@ -5,7 +5,12 @@ sed -i 's/\\"npm run dev\\" --names=server,queue,logs,vite/--names=schedule,queu
 sed -i '/npm/d' composer.json
 npx prettier --write composer.json
 
-composer require fredikaputra/activity-logger fredikaputra/socialite-boilerplate fredikaputra/async-logger laravel/fortify
+composer require fredikaputra/activity-logger \
+                fredikaputra/socialite-boilerplate \
+                fredikaputra/async-logger \
+                wildside/userstamps \
+                laravel/socialite \
+                laravel/fortify
 composer require laravel/telescope --dev
 php artisan telescope:install
 php artisan install:api --passport
@@ -37,16 +42,9 @@ for file in $(ls "$MIG_DIR"/*.php | grep -v "$PREFIX" | sort); do
     mv "$file" "$MIG_DIR/$new_name"
 done
 
-cp my-laravel-setup/.env.example .env.example
-cp my-laravel-setup/ArchTest.php tests/Unit/ArchTest.php
-cp my-laravel-setup/compose.yaml compose.yaml
-cp my-laravel-setup/devcontainer.json .devcontainer
-cp my-laravel-setup/phpunit.xml phpunit.xml
-cp my-laravel-setup/bootstrap/* bootstrap
-cp my-laravel-setup/migrations/* database/migrations
-cp my-laravel-setup/Providers/* app/Providers
-cp my-laravel-setup/routes/* routes
-cp my-laravel-setup/workflows/* .github/workflows
+composer lint
+
+cp my-laravel-setup/src .
 mv docker/8.4/* .devcontainer
 
 node -e "
