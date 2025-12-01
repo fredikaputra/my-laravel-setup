@@ -45,7 +45,7 @@ done
 
 composer lint
 
-cp my-laravel-setup/src .
+cp -r my-laravel-setup/src .
 mv docker/8.4/* .devcontainer
 
 node -e "
