@@ -3,16 +3,21 @@
 sed -i 's/#93c5fd,#c4b5fd,#fb7185,#fdba74/#fdba74,#c4b5fd,#fb7185/g' composer.json
 sed -i 's/php artisan serve/php artisan schedule:work/g' composer.json
 sed -i 's/\\"npm run dev\\" --names=server,queue,logs,vite/--names=schedule,queue,logs/g' composer.json
+sed -i '/boost/d' composer.json
 sed -i '/npm/d' composer.json
 npx prettier --write composer.json
 
+curl -fsSL https://opencode.ai/install | bash
 composer require fredikaputra/activity-logger \
                 fredikaputra/socialite-boilerplate \
                 fredikaputra/async-logger \
                 wildside/userstamps \
                 laravel/socialite \
-                laravel/fortify
+                laravel/fortify \
+                laravel/nightwatch \
+                dedoc/scramble
 composer require laravel/telescope --dev
+composer update
 php artisan telescope:install
 php artisan install:api --passport
 php artisan fortify:install
@@ -45,7 +50,7 @@ done
 
 composer lint
 
-cp -r my-laravel-setup/src .
+cp -r my-laravel-setup/src/* .
 mv docker/8.4/* .devcontainer
 
 node -e "
@@ -79,3 +84,12 @@ rm -rf .cursor \
         my-laravel-setup
 
 git add .
+
+read -p 'Enter to setup Laravel Boost...'
+
+echo 'AGENTS.md' >> .gitignore
+echo 'boost.json' >> .gitignore
+echo 'opencode.json' >> .gitignore
+
+composer require laravel/boost --dev
+php artisan boost:install
