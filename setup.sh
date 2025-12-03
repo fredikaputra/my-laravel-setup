@@ -7,7 +7,6 @@ sed -i '/boost/d' composer.json
 sed -i '/npm/d' composer.json
 npx prettier --write composer.json
 
-curl -fsSL https://opencode.ai/install | bash
 composer require fredikaputra/activity-logger \
                 fredikaputra/socialite-boilerplate \
                 fredikaputra/async-logger \
@@ -22,6 +21,9 @@ php artisan telescope:install
 php artisan install:api --passport
 php artisan fortify:install
 php artisan sail:publish
+
+read -p 'Enter to continue...'
+git add .
 
 MIG_DIR="database/migrations"
 PREFIX="0001_01_01_"
@@ -48,7 +50,13 @@ for file in $(ls "$MIG_DIR"/*.php | grep -v "$PREFIX" | sort); do
     mv "$file" "$MIG_DIR/$new_name"
 done
 
+read -p 'Enter to continue...'
+git add .
+
 composer lint
+
+read -p 'Enter to continue...'
+git add .
 
 cp -r my-laravel-setup/src/* .
 mv docker/8.4/* .devcontainer
@@ -83,9 +91,8 @@ rm -rf .cursor \
         app/Actions/.gitkeep \
         my-laravel-setup
 
-git add .
-
 read -p 'Enter to setup Laravel Boost...'
+git add .
 
 echo 'AGENTS.md' >> .gitignore
 echo 'boost.json' >> .gitignore

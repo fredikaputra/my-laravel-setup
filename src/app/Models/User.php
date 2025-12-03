@@ -78,14 +78,6 @@ final class User extends Authenticatable implements MustVerifyEmail, OAuthentica
     }
 
     /**
-     * Get the route key for the model.
-     */
-    public function getRouteKeyName(): string
-    {
-        return 'uuid';
-    }
-
-    /**
      * Get the GitHub user from the stored token.
      */
     public function github(): ?\Laravel\Socialite\Contracts\User
