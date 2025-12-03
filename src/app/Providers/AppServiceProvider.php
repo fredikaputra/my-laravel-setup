@@ -39,13 +39,7 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function configurePasswordRules(): void
     {
-        Password::defaults(function () {
-            $rule = Password::min(8);
-
-            return app()->environment('production')
-                ? $rule->letters()->mixedCase()->numbers()->symbols()->uncompromised()
-                : $rule;
-        });
+        Password::defaults(fn () => Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised());
     }
 
     /**

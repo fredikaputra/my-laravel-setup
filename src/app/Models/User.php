@@ -21,8 +21,17 @@ use Mattiverse\Userstamps\Traits\Userstamps;
 
 final class User extends Authenticatable implements MustVerifyEmail, OAuthenticatable
 {
+    use HasApiTokens;
+
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, HasUuids, Notifiable, Prunable, SoftDeletes, TwoFactorAuthenticatable, Userstamps;
+    use HasFactory;
+
+    use HasUuids;
+    use Notifiable;
+    use Prunable;
+    use SoftDeletes;
+    use TwoFactorAuthenticatable;
+    use Userstamps;
 
     /**
      * The attributes that are mass assignable.
@@ -49,6 +58,16 @@ final class User extends Authenticatable implements MustVerifyEmail, OAuthentica
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    /**
      * Get the prunable model query.
      *
      * @return Builder<self>
@@ -56,19 +75,6 @@ final class User extends Authenticatable implements MustVerifyEmail, OAuthentica
     public function prunable(): Builder
     {
         return self::query()->where('created_at', '<=', now()->subMonth());
-    }
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    public function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
     }
 
     /**
@@ -88,11 +94,11 @@ final class User extends Authenticatable implements MustVerifyEmail, OAuthentica
             return null;
         }
 
-        return Socialite::driver('github')->userFromToken($this->github_token);
+        return Socialite::driver('github')->user();
     }
 
     /**
-     * Get the GitHub user from the stored token.
+     * Get the Google user from the stored token.
      */
     public function google(): ?\Laravel\Socialite\Contracts\User
     {
@@ -100,6 +106,6 @@ final class User extends Authenticatable implements MustVerifyEmail, OAuthentica
             return null;
         }
 
-        return Socialite::driver('google')->userFromToken($this->google_token);
+        return Socialite::driver('google')->user();
     }
 }
