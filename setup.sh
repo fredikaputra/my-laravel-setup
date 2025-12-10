@@ -59,7 +59,7 @@ read -p 'Enter to continue...'
 git add .
 
 cp -r my-laravel-setup/src/* .
-mv docker/8.4/* .devcontainer
+mv docker/8.5/* .devcontainer
 
 node -e "
 const fs = require('fs');
