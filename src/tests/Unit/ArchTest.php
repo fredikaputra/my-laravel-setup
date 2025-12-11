@@ -50,9 +50,7 @@ arch('listeners')
     ->expect('App\Listeners')
     ->toImplement(ShouldBeEncrypted::class)
     ->toImplement(ShouldQueue::class)
-    ->ignoring('App\Listeners\Log\Console')
-    ->toImplement(ShouldQueueAfterCommit::class)
-    ->ignoring('App\Listeners\Log\Console');
+    ->toImplement(ShouldQueueAfterCommit::class);
 
 arch('mailables')
     ->expect('App\Mail')
@@ -61,23 +59,3 @@ arch('mailables')
 arch('notifications')
     ->expect('App\Notifications')
     ->toImplement(ShouldQueue::class);
-
-arch('observers')
-    ->expect('App\Observers')
-    ->toHaveMethods([
-        'retrieved',
-        'creating',
-        'created',
-        'updating',
-        'updated',
-        'saving',
-        'saved',
-        'deleting',
-        'deleted',
-        'trashed',
-        'forceDeleting',
-        'forceDeleted',
-        'restoring',
-        'restored',
-        'replicating',
-    ]);

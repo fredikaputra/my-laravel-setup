@@ -15,14 +15,13 @@ composer require fredikaputra/activity-logger \
                 laravel/fortify \
                 laravel/nightwatch \
                 dedoc/scramble
-composer require laravel/telescope --dev
+composer require laravel/telescope spatie/laravel-web-tinker --dev
 composer update
 php artisan telescope:install
 php artisan install:api --passport
 php artisan fortify:install
 php artisan sail:publish
 
-read -p 'Enter to continue...'
 git add .
 
 MIG_DIR="database/migrations"
@@ -53,13 +52,16 @@ done
 read -p 'Enter to continue...'
 git add .
 
-composer lint
+cp -r my-laravel-setup/src/. .
+mv docker/8.4/* .devcontainer
 
 read -p 'Enter to continue...'
 git add .
 
-cp -r my-laravel-setup/src/* .
-mv docker/8.5/* .devcontainer
+composer lint
+php artisan migrate:fresh
+
+sed -i '/^\/public\/storage/a\/public\/vendor' .gitignore
 
 node -e "
 const fs = require('fs');
@@ -94,9 +96,11 @@ rm -rf .cursor \
 read -p 'Enter to setup Laravel Boost...'
 git add .
 
+echo '' >> .gitignore
 echo 'AGENTS.md' >> .gitignore
 echo 'boost.json' >> .gitignore
 echo 'opencode.json' >> .gitignore
 
 composer require laravel/boost --dev
 php artisan boost:install
+composer test
