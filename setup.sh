@@ -14,6 +14,7 @@ composer require fredikaputra/activity-logger \
                 laravel/socialite \
                 laravel/fortify \
                 laravel/nightwatch \
+                laravel/octane \
                 dedoc/scramble
 composer require laravel/telescope spatie/laravel-web-tinker --dev
 composer update
@@ -99,7 +100,8 @@ git add .
 echo '' >> .gitignore
 echo 'AGENTS.md' >> .gitignore
 echo 'boost.json' >> .gitignore
-echo 'opencode.json' >> .gitignore
+echo 'opencode.jsonc' >> .gitignore
+echo '.idx' >> .gitignore
 
 composer require laravel/boost --dev
 php artisan boost:install
