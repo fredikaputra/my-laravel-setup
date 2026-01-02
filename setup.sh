@@ -10,7 +10,6 @@ npx prettier --write composer.json
 composer require fredikaputra/activity-logger \
                 fredikaputra/socialite-boilerplate \
                 fredikaputra/async-logger \
-                wildside/userstamps \
                 laravel/socialite \
                 laravel/fortify \
                 laravel/nightwatch \

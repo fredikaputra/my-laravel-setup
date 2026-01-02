@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Mattiverse\Userstamps\Traits\Userstamps;
 
 arch()->preset()->php();
 // arch()->preset()->laravel(); https://github.com/pestphp/pest/issues/1525
@@ -33,7 +32,6 @@ arch('models')
     ->toUseTraits([
         SoftDeletes::class,
         Prunable::class,
-        Userstamps::class,
         HasUuids::class,
     ]);
 

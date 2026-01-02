@@ -17,7 +17,6 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Socialite\Facades\Socialite;
-use Mattiverse\Userstamps\Traits\Userstamps;
 
 final class User extends Authenticatable implements MustVerifyEmail, OAuthenticatable
 {
@@ -31,7 +30,6 @@ final class User extends Authenticatable implements MustVerifyEmail, OAuthentica
     use Prunable;
     use SoftDeletes;
     use TwoFactorAuthenticatable;
-    use Userstamps;
 
     /**
      * The attributes that are mass assignable.
