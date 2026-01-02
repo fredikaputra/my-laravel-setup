@@ -111,7 +111,7 @@ git add .
 echo '' >> .gitignore
 echo 'AGENTS.md' >> .gitignore
 echo 'boost.json' >> .gitignore
-echo 'opencode.jsonc' >> .gitignore
+echo 'opencode.json' >> .gitignore
 echo '.idx' >> .gitignore
 
 composer require laravel/boost --dev
