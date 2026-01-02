@@ -53,6 +53,18 @@ done
 read -p 'Enter to continue...'
 git add .
 
+TARGET_DIR="database/migrations"
+
+if [ ! -d "$TARGET_DIR" ]; then
+  echo "Error: Directory $TARGET_DIR does not exist."
+  exit 1
+fi
+
+find "$TARGET_DIR" -type f -name "*.php" -exec sed -i "s/foreignId('user_id')/foreignUuid('user_id')/g" {} +
+
+read -p 'Enter to continue...'
+git add .
+
 cp -r my-laravel-setup/src/. .
 mv docker/8.4/* .devcontainer
 
