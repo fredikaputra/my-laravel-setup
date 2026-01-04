@@ -66,6 +66,7 @@ git add .
 
 cp -r my-laravel-setup/src/. .
 mv docker/8.4/* .devcontainer
+mv docker/mysql/create-testing-database.sh .devcontainer
 
 read -p 'Enter to continue...'
 git add .
