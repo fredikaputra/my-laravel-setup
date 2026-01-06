@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Scout\Searchable;
 
 arch()->preset()->php();
 // arch()->preset()->laravel(); https://github.com/pestphp/pest/issues/1525
@@ -33,6 +34,7 @@ arch('models')
         SoftDeletes::class,
         Prunable::class,
         HasUuids::class,
+        Searchable::class,
     ]);
 
 arch('user model')

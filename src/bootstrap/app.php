@@ -15,11 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up'
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->throttleApi();
-        $middleware->web(append: [
-            'throttle:web',
-            CreateFreshApiToken::class, // Must be the last entry for SPA.
-        ]);
+        $middleware->web(CreateFreshApiToken::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

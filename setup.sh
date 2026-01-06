@@ -14,13 +14,18 @@ composer require fredikaputra/activity-logger \
                 laravel/fortify \
                 laravel/nightwatch \
                 laravel/octane \
-                dedoc/scramble
+                laravel/horizon \
+                laravel/scout \
+                dedoc/scramble \
+                http-interop/http-factory-guzzle \
+                meilisearch/meilisearch-php
 composer require laravel/telescope spatie/laravel-web-tinker --dev
 composer update
 php artisan telescope:install
 php artisan install:api --passport
 php artisan fortify:install
 php artisan sail:publish
+php artisan horizon:install
 
 git add .
 
@@ -64,6 +69,7 @@ find "$TARGET_DIR" -type f -name "*.php" -exec sed -i "s/foreignId('user_id')/fo
 read -p 'Enter to continue...'
 git add .
 
+rm -r config
 cp -r my-laravel-setup/src/. .
 mv docker/8.4/* .devcontainer
 mv docker/mysql/create-testing-database.sh .devcontainer

@@ -16,6 +16,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
+use Laravel\Scout\Searchable;
 use Laravel\Socialite\Facades\Socialite;
 
 final class User extends Authenticatable implements MustVerifyEmail, OAuthenticatable
@@ -28,6 +29,7 @@ final class User extends Authenticatable implements MustVerifyEmail, OAuthentica
     use HasUuids;
     use Notifiable;
     use Prunable;
+    use Searchable;
     use SoftDeletes;
     use TwoFactorAuthenticatable;
 
