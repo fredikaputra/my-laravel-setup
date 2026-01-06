@@ -1,8 +1,9 @@
 #!/bin/bash
 
-sed -i 's/#93c5fd,#c4b5fd,#fb7185,#fdba74/#fdba74,#c4b5fd,#fb7185/g' composer.json
+echo '*' > my-laravel-setup/.gitignore
+
 sed -i 's/php artisan serve/php artisan schedule:work/g' composer.json
-sed -i 's/\\"npm run dev\\" --names=server,queue,logs,vite/--names=schedule,queue,logs/g' composer.json
+sed -i 's/\\"npm run dev\\" --names=server,queue,logs,vite/\\"php artisan horizon\\" --names=schedule,queue,logs,horizon/g' composer.json
 sed -i '/boost/d' composer.json
 sed -i '/npm/d' composer.json
 npx prettier --write composer.json
@@ -16,21 +17,26 @@ composer require fredikaputra/activity-logger \
                 laravel/octane \
                 laravel/horizon \
                 laravel/scout \
+                laravel/mcp \
                 dedoc/scramble \
                 http-interop/http-factory-guzzle \
                 meilisearch/meilisearch-php
-composer require laravel/telescope spatie/laravel-web-tinker --dev
+composer require laravel/telescope laravel/sail laravel/pulse spatie/laravel-web-tinker --dev
 composer update
 php artisan telescope:install
 php artisan install:api --passport
 php artisan fortify:install
 php artisan sail:publish
 php artisan horizon:install
+php artisan vendor:publish --tag=ai-routes
 
 git add .
 
 MIG_DIR="database/migrations"
 PREFIX="0001_01_01_"
+
+rm database/migrations/0001_01_01_000001_create_cache_table.php
+rm database/migrations/0001_01_01_000002_create_jobs_table.php
 
 last_index=$(ls "$MIG_DIR"/"$PREFIX"*.php 2>/dev/null | sed -E "s/.*$PREFIX([0-9]+)_.*/\1/" | sort -rn | head -1)
 
@@ -71,6 +77,7 @@ git add .
 
 rm -r config
 cp -r my-laravel-setup/src/. .
+cp .env.example .env
 mv docker/8.4/* .devcontainer
 mv docker/mysql/create-testing-database.sh .devcontainer
 
@@ -110,6 +117,8 @@ rm -rf .cursor \
         README.md \
         vite.config.js \
         app/Actions/.gitkeep \
+        app/Providers/HorizonServiceProvider.php \
+        app/Providers/TelescopeServiceProvider.php \
         my-laravel-setup
 
 read -p 'Enter to setup Laravel Boost...'
