@@ -114,6 +114,11 @@ rm -rf .cursor \
         app/Providers/TelescopeServiceProvider.php \
         my-laravel-setup
 
+read -p 'Enter to continue...'
+git add .
+
+php artisan sail:install --devcontainer
+
 read -p 'Last touch...'
 git add .
 
