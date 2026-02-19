@@ -30,6 +30,7 @@ MIG_DIR="database/migrations"
 PREFIX="0001_01_01_"
 
 rm database/migrations/0001_01_01_000001_create_cache_table.php
+mv database/migrations/0001_01_01_000000_create_users_table.php database/migrations/0001_01_01_000001_create_users_table.php
 
 last_index=$(ls "$MIG_DIR"/"$PREFIX"*.php 2>/dev/null | sed -E "s/.*$PREFIX([0-9]+)_.*/\1/" | sort -rn | head -1)
 
