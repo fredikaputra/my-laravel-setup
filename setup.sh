@@ -105,8 +105,10 @@ rm -rf .cursor \
         resources \
         tests/Browser \
         .mcp.json \
-        package-lock.json \
+        bun.lock \
         package.json \
+        boost.json \
+        AGENTS.md \
         CLAUDE.md \
         README.md \
         vite.config.js \
@@ -118,13 +120,5 @@ rm -rf .cursor \
 read -p 'Enter to continue...'
 git add .
 
-php artisan sail:install --devcontainer
-
-read -p 'Last touch...'
-git add .
-
-echo '' >> .gitignore
-echo 'AGENTS.md' >> .gitignore
-echo 'boost.json' >> .gitignore
-echo 'opencode.json' >> .gitignore
-echo '.idx' >> .gitignore
+php artisan sail:install --with=redis,meilisearch,mailpit
+echo 'APP_PORT=8000' >> .env
