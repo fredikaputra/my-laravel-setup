@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo '*' > my-laravel-setup/.gitignore
-
 sed -i 's/php artisan serve/php artisan schedule:work/g' composer.json
 sed -i 's/\\"npm run dev\\" --names=server,queue,logs,vite/\\"php artisan horizon\\" --names=schedule,queue,logs,horizon/g' composer.json
 sed -i '/boost/d' composer.json
@@ -21,7 +19,7 @@ composer require fredikaputra/activity-logger \
                 dedoc/scramble \
                 http-interop/http-factory-guzzle \
                 meilisearch/meilisearch-php
-composer require laravel/telescope laravel/sail laravel/pulse spatie/laravel-web-tinker --dev
+composer require laravel/telescope laravel/sail laravel/pulse spatie/laravel-web-tinker --dev -n
 composer update
 php artisan telescope:install
 php artisan install:api --passport
@@ -36,7 +34,6 @@ MIG_DIR="database/migrations"
 PREFIX="0001_01_01_"
 
 rm database/migrations/0001_01_01_000001_create_cache_table.php
-rm database/migrations/0001_01_01_000002_create_jobs_table.php
 
 last_index=$(ls "$MIG_DIR"/"$PREFIX"*.php 2>/dev/null | sed -E "s/.*$PREFIX([0-9]+)_.*/\1/" | sort -rn | head -1)
 

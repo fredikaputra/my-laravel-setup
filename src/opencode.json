@@ -30,5 +30,19 @@
                 ".php"
             ]
         }
+    },
+    "permission": {
+        "bash": {
+            "git *": "ask",
+            "php artisan serve": "ask",
+            "npm run dev": "ask",
+            "npm run build": "ask",
+            "pnpm dev": "ask",
+            "pnpm build": "ask",
+            "bun dev": "ask",
+            "bun build": "ask",
+            "deno task dev": "ask",
+            "deno task build": "ask"
+        }
     }
 }
