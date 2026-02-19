@@ -1,8 +1,7 @@
 #!/bin/bash
 
 sed -i 's/php artisan serve/php artisan schedule:work/g' composer.json
-sed -i 's/\\"npm run dev\\" --names=server,queue,logs,vite/\\"php artisan horizon\\" --names=schedule,queue,logs,horizon/g' composer.json
-sed -i '/boost/d' composer.json
+sed -i 's/\\"bun run dev\\" --names=server,queue,logs,vite/\\"php artisan horizon\\" --names=schedule,queue,logs,horizon/g' composer.json
 sed -i '/npm/d' composer.json
 npx prettier --write composer.json
 
@@ -11,13 +10,10 @@ composer require fredikaputra/activity-logger \
                 fredikaputra/async-logger \
                 laravel/socialite \
                 laravel/fortify \
-                laravel/nightwatch \
                 laravel/octane \
                 laravel/horizon \
                 laravel/scout \
-                laravel/mcp \
                 dedoc/scramble \
-                http-interop/http-factory-guzzle \
                 meilisearch/meilisearch-php
 composer require laravel/telescope laravel/sail laravel/pulse spatie/laravel-web-tinker --dev -n
 composer update
@@ -118,7 +114,7 @@ rm -rf .cursor \
         app/Providers/TelescopeServiceProvider.php \
         my-laravel-setup
 
-read -p 'Enter to setup Laravel Boost...'
+read -p 'Last touch...'
 git add .
 
 echo '' >> .gitignore
@@ -126,7 +122,3 @@ echo 'AGENTS.md' >> .gitignore
 echo 'boost.json' >> .gitignore
 echo 'opencode.json' >> .gitignore
 echo '.idx' >> .gitignore
-
-composer require laravel/boost --dev
-php artisan boost:install
-composer test
