@@ -4,21 +4,31 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Prunable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Scout\Searchable;
-use Laravel\Socialite\Facades\Socialite;
 
+/**
+ * @property-read string $id
+ * @property-read string $name
+ * @property-read string $email
+ * @property-read CarbonInterface|null $email_verified_at
+ * @property-read string $password
+ * @property-read string|null $remember_token
+ * @property-read string|null $two_factor_secret
+ * @property-read string|null $two_factor_recovery_codes
+ * @property-read CarbonInterface|null $two_factor_confirmed_at
+ * @property-read CarbonInterface $created_at
+ * @property-read CarbonInterface $updated_at
+ */
 final class User extends Authenticatable implements MustVerifyEmail, OAuthenticatable
 {
     use HasApiTokens;
@@ -28,76 +38,47 @@ final class User extends Authenticatable implements MustVerifyEmail, OAuthentica
 
     use HasUuids;
     use Notifiable;
-    use Prunable;
     use Searchable;
-    use SoftDeletes;
     use TwoFactorAuthenticatable;
 
     /**
-     * The attributes that are mass assignable.
-     *
      * @var list<string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'github_token',
-        'google_token',
+        'remember_token',
+        'email_verified_at',
     ];
 
     /**
-     * The attributes that should be visible for serialization.
-     *
      * @var list<string>
      */
-    protected $visible = [
-        'id',
-        'name',
-        'email',
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
-    /**
-     * Get the prunable model query.
-     *
-     * @return Builder<self>
-     */
-    public function prunable(): Builder
+    public function casts(): array
     {
-        return self::query()->where('created_at', '<=', now()->subMonth());
-    }
-
-    /**
-     * Get the GitHub user from the stored token.
-     */
-    public function github(): ?\Laravel\Socialite\Contracts\User
-    {
-        if (! $this->github_token) {
-            return null;
-        }
-
-        return Socialite::driver('github')->user();
-    }
-
-    /**
-     * Get the Google user from the stored token.
-     */
-    public function google(): ?\Laravel\Socialite\Contracts\User
-    {
-        if (! $this->google_token) {
-            return null;
-        }
-
-        return Socialite::driver('google')->user();
+        return [
+            'id' => 'string',
+            'name' => 'string',
+            'email' => 'string',
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'remember_token' => 'string',
+            'two_factor_secret' => 'string',
+            'two_factor_recovery_codes' => 'string',
+            'two_factor_confirmed_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 }
